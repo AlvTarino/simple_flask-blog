@@ -1,0 +1,28 @@
+{%extends "layout.html"%}
+{%block content%}
+    {%for sample in sample.items%}
+        <article class="media content-section">
+            <img class="rounded-circle article-img"  src="{{ url_for('static', filename='profiles/' + sample.author.image_file) }}">
+            <div class="media-body">
+            <div class="article-metadata">
+                <a class="mr-2" href="{{ url_for('users.user_posts', username=sample.author.username) }}">{{ sample.author.username }}</a>
+                <small class="text-muted">{{ sample.date_posted.strftime('%Y-%m-%d') }}</small>
+            </div>
+            <h2><a class="article-title" href="{{ url_for('posts.display_single_post', post_id=sample.id) }}">{{ sample.title }}</a></h2>
+            <p class="article-content">{{ sample.content }}</p>
+            </div>
+        </article>
+    {%endfor%}
+    <!-- Pagination -->
+    {% for page_num in sample.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+        {% if page_num %}
+            {% if sample.page == page_num %}
+                <a class="btn btn-info mb-4" href="{{ url_for('main.home', page=page_num) }}">{{ page_num }}</a>
+            {% else %}
+                <a class="btn btn-outline-info mb-4" href="{{ url_for('main.home', page=page_num) }}">{{ page_num }}</a>
+            {% endif %}
+        {% else %}
+            ....
+        {% endif %}
+    {%endfor%}
+{%endblock content%}
